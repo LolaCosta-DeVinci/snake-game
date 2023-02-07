@@ -4,14 +4,18 @@ const ctx = canvas.getContext('2d');
 // updating the screen 7 times a second
 let speed = 7;
 
-// how many tiles in a row/column
+// number of tiles in a row/column
 let tileCount = 30;
 // size of one tile
 let tileSize = canvas.width / tileCount - 2;
-// snake will be centered : 600width / 30tiles = 20px/tile
+// snake will be centered : 600width / 30tiles = 20
 let headX = 10;
 let headY = 10;
 
+let appleX = 5;
+let appleY = 5;
+
+// directions of snake
 let xVelocity = 0;
 let yVelocity = 0;
 
@@ -19,13 +23,16 @@ let yVelocity = 0;
 const drawGame = () => {
     clearScreen();
     changeSnakePosition();
+
+    checkAppleCollision();
+    drawApple();
     drawSnake();
     // refresh page 7 times a second to move the snake
     setTimeout(drawGame, 1000 / speed);
 };
 
 const clearScreen = () => {
-    ctx.fillStyle = "#D8D8D8";
+    ctx.fillStyle = "#1B1B1B";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 };
 
@@ -39,6 +46,19 @@ const changeSnakePosition = () => {
     headY = headY + yVelocity;
 };
 
+const drawApple = () => {
+    ctx.fillStyle = 'red';
+    ctx.fillRect(appleX * tileCount, appleY * tileCount, tileSize, tileSize);
+};
+
+const checkAppleCollision = () => {
+    if (appleX === headX && appleY === headY) {
+        appleX = Math.floor(Math.random() * 20);
+        appleY = Math.floor(Math.random() * 20);
+    }
+};
+
+// keyboard
 const keyDown = (event) => {
     // up
     if (event.keyCode === 38) {
